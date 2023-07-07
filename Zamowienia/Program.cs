@@ -7,7 +7,7 @@ class Program
 {
     static void Main()
     {
-        string year = "2018";
+        string year = "2014";
         string xml = @"<Customers>
   <Customer>
     <CustomerID>KRAHA</CustomerID>
@@ -57,21 +57,16 @@ class Program
             .Select(c => new
             {
                 CompanyName = c.Element("CompanyName")?.Value,
-                City = c.Element("City")?.Value,
-                Country = c.Element("Country")?.Value,
                 Orders = c.Element("Orders")
                     .Elements("Order")
                     .Select(o => new
                     {
-                        OrderDate = o.Element("OrderDate")?.Value.ToString(),
+                        OrderDate = o.Element("OrderDate")?.Value,
                     })
                     .Where(o => o.OrderDate.StartsWith(year))
                     .ToList()
             })
             .Where(c => c.Orders.Any())
-            .OrderBy(c => c.Country)
-            .ThenBy(c => c.City)
-            .ThenBy(c => c.CompanyName)
             .ToList();
 
         if (customers.Any())
